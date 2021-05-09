@@ -127,5 +127,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 GRAPHENE = {
-    "SCHEMA": "product.graphql.api.schema"
+    "SCHEMA": "mysite.graphql.api.schema"
 }

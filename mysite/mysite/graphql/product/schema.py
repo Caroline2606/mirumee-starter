@@ -1,13 +1,26 @@
 import graphene
 
-from .types import ProductType
-from ...product.models import Product
+from .types import ProductType, ProductVariantType
+from ...product.models import Product, ProductVar
+from .mutations import ProductCreate
 
 class ProductQueries(graphene.ObjectType):
     product = graphene.Field(
         ProductType, id=graphene.Argument(graphene.ID, description="ID of product")
     )
+    products = graphene.List(ProductType)
+    product_variant = graphene.Field(ProductVar, id=graphene.Argument(graphene.ID, description="ID of product variant."))
 
     def resolve_product(self, _info, id):
         product = Product.objects.filter(id=id).first()
         return product
+
+    def resolve_products(self, _info):
+        products = Product.objects.all()
+        return products
+
+    def reslove_product_variant(self, _info, id):
+        return ProductVariantType.objects.filter(id=id).first()
+
+class ProductMutations(graphene.ObjectType):
+    product_create = ProductCreate.Field()

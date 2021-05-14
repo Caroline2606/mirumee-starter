@@ -1,7 +1,6 @@
-from decimal import Decimal
-
 import graphene
 
+from decimal import Decimal
 from .types import ProductType, ProductVariantType
 from ...product.models import Product
 

@@ -1,5 +1,6 @@
 import graphene
 
+import mysite
 from .types import ProductType, ProductVariantType
 from ...product.models import Product, ProductVar
 from .mutations import ProductCreate
@@ -9,7 +10,10 @@ class ProductQueries(graphene.ObjectType):
         ProductType, id=graphene.Argument(graphene.ID, description="ID of product")
     )
     products = graphene.List(ProductType)
-    product_variant = graphene.Field(ProductVar, id=graphene.Argument(graphene.ID, description="ID of product variant."))
+    product_variant = graphene.Field(
+        ProductVar,
+        id=graphene.Argument(graphene.ID, description="ID of product variant.")
+    )
 
     def resolve_product(self, _info, id):
         product = Product.objects.filter(id=id).first()

@@ -1,6 +1,5 @@
 import graphene
 
-import mysite
 from .types import ProductType, ProductVariantType
 from ...product.models import Product, ProductVar
 from .mutations import ProductCreate
@@ -11,7 +10,7 @@ class ProductQueries(graphene.ObjectType):
     )
     products = graphene.List(ProductType)
     product_variant = graphene.Field(
-        ProductVar,
+        ProductVariantType,
         id=graphene.Argument(graphene.ID, description="ID of product variant.")
     )
 
@@ -24,7 +23,7 @@ class ProductQueries(graphene.ObjectType):
         return products
 
     def reslove_product_variant(self, _info, id):
-        return ProductVariantType.objects.filter(id=id).first()
+        return ProductVar.objects.filter(id=id).first()
 
 class ProductMutations(graphene.ObjectType):
     product_create = ProductCreate.Field()

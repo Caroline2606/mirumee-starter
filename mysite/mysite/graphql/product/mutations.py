@@ -16,11 +16,9 @@ class ProductCreate(graphene.Mutation):
     class Arguments:
         input = ProductCreateInput(required=True)
 
+
     def clean_input(self, input):
-        input(ProductCreateInput)
-        for product in input:
-            price = product['price']
-        Decimal(price)
+        print(input)
         return input
 
     def mutate(self, root, info, input):
@@ -51,4 +49,3 @@ class ProductVariantCreate(graphene.Mutation):
         product = Product.objects.create(**cleaned_input)
 
         return ProductVariantCreate(product=product)
-

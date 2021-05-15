@@ -8,8 +8,8 @@ class Product(models.Model):
     quantity = models.IntegerField(default=0)
 
 
-class ProductVar(models.Model):
-    product = models.ForeignKey(Product, related_name="variants", on_delete=models.CASCADE)
-    name = models.CharField(max_length=200, blank=False, null=False)
+class ProductVariant(models.Model):
+    product = models.ForeignKey(Product, related_name='variants', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, blank=False, null=False)
     sku = models.CharField(max_length=255, blank=False, null=False, unique=True)
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)

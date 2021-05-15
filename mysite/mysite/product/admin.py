@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Product, ProductVar
+from .models import Product, ProductVariant
 
 admin.site.register(Product)
-admin.site.register(ProductVar)
+admin.site.register(ProductVariant)

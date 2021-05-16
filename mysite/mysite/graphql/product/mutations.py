@@ -17,12 +17,14 @@ class ProductCreate(graphene.Mutation):
     class Arguments:
         input = ProductCreateInput(required=True)
 
-    def clean_input(self, input):
+    @classmethod
+    def clean_input(cls, input):
         # TODO price should be Decimal
         return input
 
-    def mutate(self, root, info, input):
-        cleaned_input = self.clean_input(input)
+    @classmethod
+    def mutate(cls, root, info, input):
+        cleaned_input = cls.clean_input(input)
 
         product = Product.objects.create(**cleaned_input)
 

@@ -13,3 +13,5 @@ class ProductVariant(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
     sku = models.CharField(max_length=255, blank=False, null=False, unique=True)
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+
+

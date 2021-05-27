@@ -1,28 +1,35 @@
 import graphene
+from django.core.exceptions import ValidationError
 
-from .types import CheckoutType
-from ...checkout.models import Checkout
+from ...checkout.models import Checkout, CheckoutLine
+from ...product.models import ProductVariant
+from .types import CheckoutLineType, CheckoutType
 
+class CheckoutLineCreateInput(graphene.InputObjectType):
+    quantity = graphene.Int(required=True, description="The number of items purchased.")
+    variant_id = graphene.ID(required=True, description="ID of the product variant.")
 
 class CheckoutCreateInput(graphene.InputObjectType):
-    lines = graphene.String(required=True)
-    user_email = graphene.String(required=True)
+    user_email = graphene.String()
+    lines = graphene.List(CheckoutLineCreateInput, required=True)
 
 class CheckoutCreate(graphene.Mutation):
     checkout = graphene.Field(CheckoutType)
 
     class Arguments:
         input = CheckoutCreateInput(required=True)
-        user_id = graphene.ID()
 
     @classmethod
-    def clean_input(cls, data):
-        return data
+    def mutate(cls, root, _info, input):
 
-    @classmethod
-    def mutate(cls, root, _info, input, user_id):
-        cleaned_input = cls.clean_input(input)
+        lines = input.pop('lines')
+        checkout = Checkout.objects.create(**input)
 
-        checkout = Checkout.objects.create(user_id=user_id, **cleaned_input)
-
+        checkout_lines = []
+        for line in lines:
+            checkout_lines.append(
+                CheckoutLine(checkout_id=checkout.id, **line)
+            )
+        checkout.lines.bulk_create(checkout_lines)
         return CheckoutCreate(checkout=checkout)
+

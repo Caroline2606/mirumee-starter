@@ -1,7 +1,7 @@
 import graphene
 
-from ..graphql.product.schema import ProductQueries, ProductMutations
-from ..graphql.checkout.schema import CheckoutQueries, CheckoutMutations
+from .product.schema import ProductQueries, ProductMutations
+from .checkout.schema import CheckoutQueries, CheckoutMutations
 
 
 class Query(ProductQueries, CheckoutQueries):

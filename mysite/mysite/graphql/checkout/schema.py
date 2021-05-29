@@ -14,6 +14,7 @@ class CheckoutQueries(graphene.ObjectType):
         CheckoutLineType,
         id=graphene.Argument(graphene.ID, description="ID of checkout line.")
     )
+    checkout_lines = graphene.List(CheckoutLineType)
 
     def reslove_checkout(self, _info, token):
         checkout = Checkout.objects.filter(id=id).first()

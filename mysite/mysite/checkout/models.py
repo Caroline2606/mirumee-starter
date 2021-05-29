@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Checkout(models.Model):
-    user_email = models.EmailField(null=False, blank=False, max_length=30)
+    user_email = models.EmailField()
 
 
 class CheckoutLine(models.Model):

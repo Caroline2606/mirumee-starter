@@ -19,7 +19,17 @@ class CheckoutLineCreate(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, input, checkout_id):
 
+        line = input.pop('line')
         checkout_line = CheckoutLine.objects.create(checkout_id=checkout_id, **input)
+
+        checkouts = []
+        for variant_id in checkouts:
+            if variant_id in line:
+                checkout_line.lines.bulk_update(line, ['quantity'])
+            else:
+                checkouts.append(
+                    Checkout(variant_id=variant_id, **input)
+                )
 
         return CheckoutLineCreate(checkout_line=checkout_line)
 

@@ -1,5 +1,5 @@
 import graphene
-
+from django.core.exceptions import ObjectDoesNotExist
 
 from ...checkout.models import Checkout, CheckoutLine
 from ...product.models import ProductVariant
@@ -8,30 +8,6 @@ from .types import CheckoutLineType, CheckoutType
 class CheckoutLineCreateInput(graphene.InputObjectType):
     quantity = graphene.Int(required=True, description="The number of items purchased.")
     variant_id = graphene.ID(required=True, description="ID of the product variant.")
-
-class CheckoutLineCreate(graphene.Mutation):
-    checkout_line = graphene.Field(CheckoutLineType)
-
-    class Arguments:
-        input = CheckoutLineCreateInput(required=True)
-        checkout_id = graphene.ID(required=True)
-
-    @classmethod
-    def mutate(cls, root, info, input, checkout_id):
-
-        line = input.pop('line')
-        checkout_line = CheckoutLine.objects.create(checkout_id=checkout_id, **input)
-
-        checkouts = []
-        for variant_id in checkouts:
-            if variant_id in line:
-                checkout_line.lines.bulk_update(line, ['quantity'])
-            else:
-                checkouts.append(
-                    Checkout(variant_id=variant_id, **input)
-                )
-
-        return CheckoutLineCreate(checkout_line=checkout_line)
 
 class CheckoutCreateInput(graphene.InputObjectType):
     user_email = graphene.String()
@@ -57,3 +33,34 @@ class CheckoutCreate(graphene.Mutation):
         checkout.lines.bulk_create(checkout_lines)
         return CheckoutCreate(checkout=checkout)
 
+
+class CheckoutLineCreate(graphene.Mutation):
+    checkout_line = graphene.Field(CheckoutLineType)
+
+    class Arguments:
+        input = CheckoutLineCreateInput(required=True)
+        checkout_id = graphene.ID(required=True)
+
+    @classmethod
+    def mutate(cls, root, info, input, checkout_id):
+
+        variant_id = input.pop('varaint_id')
+        input_quantity = input.pop('quantity')
+
+        try:
+            checkout_line = CheckoutLine.objects.get(checkout_id=checkout_id, variant=variant_id)
+        except ObjectDoesNotExist():
+            checkout_line = CheckoutLine.object.create(
+                checkout_id=checkout_id,
+                variant_id=variant_id,
+                quantity=input_quantity)
+
+
+            return CheckoutLineCreate(checkout_line=checkout_line)
+
+        quantity = checkout_line.quantity + input_quantity
+
+        checkout_line.quantity = quantity
+        checkout_line.save()
+
+        return CheckoutLineCreate(checkout_line=checkout_line)

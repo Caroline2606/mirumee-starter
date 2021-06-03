@@ -39,7 +39,9 @@ INSTALLED_APPS = [
 
     'mysite.checkout',
 
-    'mysite.product'
+    'mysite.product',
+
+    'mysite.account'
 
 ]
 
@@ -129,5 +131,15 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 GRAPHENE = {
-    "SCHEMA": "mysite.graphql.api.schema"
+    "SCHEMA": "mysite.graphql.api.schema",
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
 }
+
+AUTH_USER_MODEL = 'account.User'
+
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]

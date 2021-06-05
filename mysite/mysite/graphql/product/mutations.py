@@ -1,4 +1,5 @@
 import graphene
+from graphql_jwt.decorators import superuser_required
 
 from .types import ProductType, ProductVariantType
 from ...product.models import Product, ProductVariant
@@ -23,6 +24,7 @@ class ProductCreate(graphene.Mutation):
         return input
 
     @classmethod
+    @superuser_required
     def mutate(cls, root, info, input):
         cleaned_input = cls.clean_input(input)
 
@@ -47,6 +49,7 @@ class ProductVariantCreate(graphene.Mutation):
         return data
 
     @classmethod
+    @superuser_required
     def mutate(cls, root, _info, input, product_id):
         cleaned_input = cls.clean_input(input)
 

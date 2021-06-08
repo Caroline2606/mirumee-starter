@@ -8,7 +8,7 @@ from django.db import models
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, is_active=True, **extra_fields):
-        email = UserManager.normalize_username(email)
+        email = UserManager.normalize_email(email)
 
         extra_fields.pop('username', None)
 

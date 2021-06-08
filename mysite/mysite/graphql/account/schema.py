@@ -21,7 +21,7 @@ class UserQueries(graphene.ObjectType):
         user = User.objects.filter(email=email).first()
         return user
 
-    @staff_member_required
+
     def resolve_users(self, info):
         users = User.objects.all()
         return users

@@ -6,7 +6,3 @@ class UserType(DjangoObjectType):
         model = User
         fields = '__all__'
 
-class StaffType(DjangoObjectType):
-    class Meta:
-        model = UserManager
-        fields = '__all__'

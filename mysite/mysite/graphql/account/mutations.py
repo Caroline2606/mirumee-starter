@@ -16,7 +16,6 @@ class UserCreate(graphene.Mutation):
         input = UserCreateInput(required=True)
 
     @classmethod
-    @superuser_required
     def mutate(cls, root, _info, input):
         user = User.objects.create(**input)
 

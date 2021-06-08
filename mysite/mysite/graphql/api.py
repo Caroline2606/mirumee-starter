@@ -5,6 +5,7 @@ from .checkout.schema import CheckoutQueries, CheckoutMutations
 from .account.authenticate import AuthenticateMutations
 
 
+
 class Query(ProductQueries, CheckoutQueries):
     pass
 

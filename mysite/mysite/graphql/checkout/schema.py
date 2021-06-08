@@ -21,7 +21,7 @@ class CheckoutQueries(graphene.ObjectType):
         checkout = Checkout.objects.filter(id=id).first()
         return checkout
 
-    @staff_member_required
+
     def resolve_checkouts(self, info):
         checkouts = Checkout.objects.all()
         return checkouts

@@ -1,11 +1,11 @@
 import graphene
-from graphql_jwt.decorators import superuser_required
 
-from ...account.models import User, UserManager
-from .types import UserType, StaffType
+from ...account.models import User
+from .types import UserType
 
 class UserCreateInput(graphene.InputObjectType):
     email = graphene.String()
+    password = graphene.String()
     first_name = graphene.String()
     last_name = graphene.String()
 
@@ -17,23 +17,19 @@ class UserCreate(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, _info, input):
-        user = User.objects.create(**input)
+        user = User.objects.create_user(**input)
 
         return UserCreate(user=user)
 
 
-class StaffCreateInput(graphene.InputObjectType):
-    email = graphene.String()
-    password = graphene.String()
-
 class StaffCreate(graphene.Mutation):
-    superuser = graphene.Field(StaffType)
+    user = graphene.Field(UserType)
 
     class Arguments:
-        input = StaffCreateInput(required=True)
+        input = UserCreateInput(required=True)
 
     @classmethod
     def mutate(cls, root, _info, input):
-        superuser = UserManager.objects.create_superuser(**input)
+        staff = User.objects.create_user(**input, is_staff=True)
 
-        return StaffCreate(superuser=superuser)
+        return StaffCreate(user=staff)

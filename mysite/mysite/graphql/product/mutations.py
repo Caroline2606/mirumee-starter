@@ -1,8 +1,8 @@
 import graphene
-from graphql_jwt.decorators import superuser_required
-
+from ..account.authenticate import staff_member_required, superuser_required
 from .types import ProductType, ProductVariantType
 from ...product.models import Product, ProductVariant
+from django.core.exceptions import ValidationError
 
 
 class ProductCreateInput(graphene.InputObjectType):
@@ -18,12 +18,9 @@ class ProductCreate(graphene.Mutation):
     class Arguments:
         input = ProductCreateInput(required=True)
 
-    @classmethod
-    def clean_input(cls, input):
-        # TODO price should be Decimal
-        return input
 
     @classmethod
+    @staff_member_required
     def mutate(cls, root, info, input):
         cleaned_input = cls.clean_input(input)
 
@@ -44,13 +41,33 @@ class ProductVariantCreate(graphene.Mutation):
         product_id = graphene.ID(required=True)
 
     @classmethod
+    def clean_price(cls, price):
+        if price <= 0:
+            raise ValidationError
+
+    @classmethod
+    def clean_ID(cls):
+        pass
+
+    @classmethod
+    def clean_SKU(cls):
+        pass
+
+    @classmethod
     def clean_input(cls, data):
+        breakpoint()
+        cls.clean_price()
+        cls.clean_ID()
+        cls.clean_SKU()
+
         return data
 
     @classmethod
+    @staff_member_required
     def mutate(cls, root, _info, input, product_id):
         cleaned_input = cls.clean_input(input)
 
         product_variant = ProductVariant.objects.create(product_id=product_id, **cleaned_input)
 
         return ProductVariantCreate(product_variant=product_variant)
+

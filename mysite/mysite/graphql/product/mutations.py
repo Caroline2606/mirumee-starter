@@ -1,5 +1,5 @@
 import graphene
-from ..core.utils import staff_member_required, superuser_required
+from ..core.utils import staff_member_required
 from .types import ProductType, ProductVariantType
 from ...product.models import Product, ProductVariant
 from django.core.exceptions import ValidationError
@@ -47,23 +47,34 @@ class ProductVariantCreate(graphene.Mutation):
     def clean_price(cls, price):
         if price <= 0:
             raise ValidationError
+        return price
 
     @classmethod
-    def clean_ID(cls):
-        pass
+    def clean_ID(cls, product_id):
+        for product_id in ProductVariant:
+            if product_id.objects.filter(id=id).exists():
+                return True
+            else:
+                raise ValidationError
+        return product_id
 
     @classmethod
-    def clean_SKU(cls):
-        pass
+    def clean_SKU(cls, sku, variant_id):
+
+        try:
+            sku = ProductVariant.objects.get(variant_id=variant_id)
+        except sku.objects.filter(variant_id=variant_id).exists():
+            raise ValidationError
 
     @classmethod
-    def clean_input(cls, data):
-        breakpoint()
-        cls.clean_price()
-        cls.clean_ID()
-        cls.clean_SKU()
+    def clean_input(cls, data, price, product_id, sku, variant_id):
+        cls.clean_price(price)
+        cls.clean_ID(product_id)
+        cls.clean_SKU(sku, variant_id)
 
         return data
+
+
 
     @classmethod
     @staff_member_required

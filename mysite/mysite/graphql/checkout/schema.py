@@ -1,5 +1,4 @@
 import graphene
-from graphql_jwt.decorators import staff_member_required
 
 from ...checkout.models import Checkout, CheckoutLine
 from .mutations import CheckoutCreate, CheckoutLineCreate

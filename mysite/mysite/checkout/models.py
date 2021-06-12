@@ -10,5 +10,6 @@ class CheckoutLine(models.Model):
         Checkout, related_name='lines', on_delete=models.CASCADE
     )
     variant = models.ForeignKey(
-        "product.ProductVariant", on_delete=models.CASCADE)
+        "product.ProductVariant", on_delete=models.CASCADE
+    )
     quantity = models.PositiveIntegerField()

@@ -1,4 +1,5 @@
 import graphene
+from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
 from ...checkout.models import Checkout, CheckoutLine
@@ -44,7 +45,7 @@ class CheckoutLineCreate(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, input, checkout_id):
 
-        variant_id = input.pop('varaint_id')
+        variant_id = input.pop('variant_id')
         input_quantity = input.pop('quantity')
 
         try:

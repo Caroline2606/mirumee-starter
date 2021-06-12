@@ -1,5 +1,5 @@
 import graphene
-from ..account.authenticate import staff_member_required, superuser_required
+from ..core.utils import staff_member_required, superuser_required
 from .types import ProductType, ProductVariantType
 from ...product.models import Product, ProductVariant
 from django.core.exceptions import ValidationError
@@ -18,6 +18,9 @@ class ProductCreate(graphene.Mutation):
     class Arguments:
         input = ProductCreateInput(required=True)
 
+    @classmethod
+    def clean_input(cls, input):
+        return input
 
     @classmethod
     @staff_member_required

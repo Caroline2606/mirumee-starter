@@ -26,13 +26,14 @@ class UserCreate(graphene.Mutation):
         return password
 
     @classmethod
-    def clean_first_name(cls, first_name, last_name):
+    def clean_name(cls, first_name, last_name):
         if not first_name[0].isupper() and last_name[0].isupper:
             raise SyntaxError('First letter in first_name and last_name is small')
         return first_name, last_name
 
-    def clean_input(cls, data, password):
+    def clean_input(cls, data, password, first_name, last_name):
         cls.clean_password(password)
+        cls.clean_name(first_name, last_name)
         return data
 
     @classmethod

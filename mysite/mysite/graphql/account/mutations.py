@@ -2,6 +2,7 @@ import graphene
 
 from ...account.models import User
 from .types import UserType
+from django.core.exceptions import ValidationError
 
 class UserCreateInput(graphene.InputObjectType):
     email = graphene.String()
@@ -14,6 +15,25 @@ class UserCreate(graphene.Mutation):
 
     class Arguments:
         input = UserCreateInput(required=True)
+
+    @classmethod
+    def clean_password(cls, password):
+        for password in User:
+            if password == password and len(password) >= 8:
+                return True
+            if password != password and len(password) < 8:
+                raise ValidationError('Your password is too short')
+        return password
+
+    @classmethod
+    def clean_first_name(cls, first_name, last_name):
+        if not first_name[0].isupper() and last_name[0].isupper:
+            raise SyntaxError('First letter in first_name and last_name is small')
+        return first_name, last_name
+
+    def clean_input(cls, data, password):
+        cls.clean_password(password)
+        return data
 
     @classmethod
     def mutate(cls, root, _info, input):

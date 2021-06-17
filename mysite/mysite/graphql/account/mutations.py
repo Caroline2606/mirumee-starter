@@ -15,27 +15,27 @@ class UserCreate(graphene.Mutation):
 
     class Arguments:
         input = UserCreateInput(required=True)
-    #
-    # @classmethod
-    # def clean_password(cls, password):
-    #     for password in User:
-    #         if password >= 8:
-    #             return password
-    #         if password < 8:
-    #             raise ValidationError('Your password is too short')
-    #     return password
-    #
-    # @classmethod
-    # def clean_name(cls, first_name, last_name):
-    #     if not first_name[0].isupper() and last_name[0].isupper:
-    #         raise SyntaxError('First letter in first_name and last_name is small')
-    #     return first_name, last_name
-    #
-    # def clean_input(cls, data, password, first_name, last_name):
-    #     cls.clean_password(password)
-    #     cls.clean_name(first_name, last_name)
-    #
-    #     return data
+
+    @classmethod
+    def clean_password(cls, password):
+        for password in User:
+            if password >= 8:
+                return password
+            if password < 8:
+                raise ValidationError('Your password is too short')
+        return password
+
+    @classmethod
+    def clean_name(cls, first_name, last_name):
+        if not first_name[0].isupper() and last_name[0].isupper:
+            raise SyntaxError('First letter in first_name and last_name is small')
+        return first_name, last_name
+
+    def clean_input(cls, data, password, first_name, last_name):
+        cls.clean_password(password)
+        cls.clean_name(first_name, last_name)
+
+        return data
 
     @classmethod
     def mutate(cls, root, _info, input):

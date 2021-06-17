@@ -1,17 +1,9 @@
-from ....checkout.models import Checkout
 import json
 
-def test_checkout_by_id(db, client_query):
-    checkout = Checkout.objects.create(
-        userEmail="Test userEmail",
-        lines=[
-            {"variant_id: 1", "quantity: 1"}
-        ]
-    )
-
+def test_checkout_by_id(db, client_query, my_checkout ):
+    checkout = my_checkout
     response = client_query(
         """
-        
         query mycheckout($id: ID!) {
             checkout(id: $id) {
                 id
@@ -24,11 +16,10 @@ def test_checkout_by_id(db, client_query):
         }
     }
         """,
-        variabled={'id': 1}
+        variables={'id': 1}
     )
 
     content = json.loads(response.content)
-
 
     checkout_response = content['data']['checkout']
 

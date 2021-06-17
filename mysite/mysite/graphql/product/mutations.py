@@ -46,8 +46,7 @@ class ProductVariantCreate(graphene.Mutation):
     @classmethod
     def clean_price(cls, price):
         if price <= 0:
-            raise ValidationError
-        return price
+            raise ValidationError()
 
     @classmethod
     def clean_ID(cls, product_id):

@@ -66,10 +66,10 @@ class ProductVariantCreate(graphene.Mutation):
             raise ValidationError
 
     @classmethod
-    def clean_input(cls, data, price, product_id, sku, variant_id):
-        cls.clean_price(price)
-        cls.clean_ID(product_id)
-        cls.clean_SKU(sku, variant_id)
+    def clean_input(cls, data):
+        cls.clean_price(input['price'])
+        cls.clean_ID(input['product_id'])
+        cls.clean_SKU(input['sku']['variant_id'])
 
         return data
 

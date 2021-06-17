@@ -31,17 +31,17 @@ class UserCreate(graphene.Mutation):
             raise SyntaxError('First letter in first_name and last_name is small')
         return first_name, last_name
 
-    def clean_input(cls, data, password, first_name, last_name):
-        cls.clean_password(password)
-        cls.clean_name(first_name, last_name)
+    def clean_input(cls, data):
+        cls.clean_password(input['password'])
+        cls.clean_name(input['first_name']['last_name'])
 
         return data
 
     @classmethod
     def mutate(cls, root, _info, input):
-        # cleaned_input = cls.clean_input(input)
+        cleaned_input = cls.clean_input(input)
 
-        user = User.objects.create_user(**input)
+        user = User.objects.create_user(**cleaned_input)
 
         return UserCreate(user=user)
 

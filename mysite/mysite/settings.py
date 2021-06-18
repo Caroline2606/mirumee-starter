@@ -41,7 +41,9 @@ INSTALLED_APPS = [
 
     'mysite.product',
 
-    'mysite.account'
+    'mysite.account',
+
+    'mysite.order'
 
 ]
 

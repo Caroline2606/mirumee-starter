@@ -6,6 +6,7 @@ from .account.authenticate import AuthenticateMutations
 from .account.schema import UserQueries, UserMutations
 from .order.schema import OrderQueries, OrderMutations
 
+
 class Query(ProductQueries, CheckoutQueries, UserQueries, OrderQueries):
     pass
 

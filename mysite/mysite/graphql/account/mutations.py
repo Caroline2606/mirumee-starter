@@ -41,7 +41,7 @@ class UserCreate(graphene.Mutation):
     def mutate(cls, root, _info, input):
         cleaned_input = cls.clean_input(input)
 
-        user = User.objects.create_user(**cleaned_input)
+        user = User.objects.create_user(**input)
 
         return UserCreate(user=user)
 

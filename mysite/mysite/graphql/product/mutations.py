@@ -31,10 +31,12 @@ class ProductCreate(graphene.Mutation):
 
         return ProductCreate(product=product)
 
+
 class ProductVariantCreateInput(graphene.InputObjectType):
     name = graphene.String(required=True)
     sku = graphene.Int(required=True)
     price = graphene.Decimal(required=True)
+
 
 class ProductVariantCreate(graphene.Mutation):
     product_variant = graphene.Field(ProductVariantType)
@@ -73,14 +75,11 @@ class ProductVariantCreate(graphene.Mutation):
 
         return data
 
-
-
     @classmethod
     @staff_member_required
     def mutate(cls, root, _info, input, product_id):
         cleaned_input = cls.clean_input(input)
 
-        product_variant = ProductVariant.objects.create(product_id=product_id, **cleaned_input)
+        product_variant = ProductVariant.objects.create(product_id=product_id)
 
         return ProductVariantCreate(product_variant=product_variant)
-

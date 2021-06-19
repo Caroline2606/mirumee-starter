@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
 
 from django.db import models
 
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, is_active=True, **extra_fields):
         email = UserManager.normalize_email(email)
@@ -26,6 +27,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email, password=None, **extra_fields):
         return self.create_user(email, password, is_staff=True, is_superuser=True, **extra_fields)
+
 
 class User(PermissionsMixin, AbstractBaseUser):
     email = models.EmailField(unique=True)

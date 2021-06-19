@@ -1,9 +1,11 @@
 from graphene_django import DjangoObjectType
 
-from ...order.models import Order
+from ...order.models import CheckoutComplet
 
 
-class OrderType(DjangoObjectType):
+class CheckoutCompletType(DjangoObjectType):
     class Meta:
-        model = Order
+        model = CheckoutComplet
         fields = '__all__'
+
+

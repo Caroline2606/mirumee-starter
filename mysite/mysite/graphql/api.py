@@ -4,14 +4,14 @@ from .product.schema import ProductQueries, ProductMutations
 from .checkout.schema import CheckoutQueries, CheckoutMutations
 from .account.authenticate import AuthenticateMutations
 from .account.schema import UserQueries, UserMutations
-from .order.schema import OrderQueries, OrderMutations
+from .order.schema import CheckoutCompletQueries, CheckoutCompletMutations
 
 
-class Query(ProductQueries, CheckoutQueries, UserQueries, OrderQueries):
+class Query(ProductQueries, CheckoutQueries, UserQueries, CheckoutCompletQueries):
     pass
 
 
-class Mutations(ProductMutations, CheckoutMutations, AuthenticateMutations, UserMutations, OrderMutations):
+class Mutations(ProductMutations, CheckoutMutations, AuthenticateMutations, UserMutations, CheckoutCompletMutations):
     pass
 
 

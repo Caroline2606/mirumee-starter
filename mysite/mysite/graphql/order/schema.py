@@ -1,24 +1,38 @@
 import graphene
 
-from .types import OrderType
-from ...order.models import Order
-from .mutations import OrderCreate
+from .types import CheckoutCompletType
+from ...order.models import CheckoutComplet
+from .mutations import CheckoutCompletCreate
 
 
-class OrderQueries(graphene.ObjectType):
-    order = graphene.Field(
-        OrderType, checkout_id=graphene.Argument(graphene.ID, description='ID of checkout')
+class CheckoutCompletQueries(graphene.ObjectType):
+    checkout_complet = graphene.Field(
+        CheckoutCompletType, checkout_id=graphene.Argument(graphene.ID, description='ID of checkout')
     )
-    orders = graphene.List(OrderType)
+    checkouts_complet = graphene.List(CheckoutCompletType)
 
-    def resolver_order(self, _info, checkout_id):
-        order = Order.objects.filter(checkout_id=checkout_id).first()
-        return order
+    # checkout_complet_line = graphene.Field(
+    #     CheckoutCompletLineType,
+    #     id=graphene.Argument(graphene.ID, description="ID of checkout complet line")
+    # )
+    # checkouts_complet_line = graphene.List(CheckoutCompletLineType)
 
-    def resolve_orders(self, _info):
-        orders = Order.objects.all()
-        return orders
+    def resolver_checkout_complet(self, _info, checkout_id):
+        checkout_complet = CheckoutComplet.objects.filter(checkout_id=checkout_id).first()
+        return checkout_complet
+
+    def resolve_checkouts_complet(self, _info):
+        checkouts_complet = CheckoutComplet.objects.all()
+        return checkouts_complet
+
+    # def resolve_checkout_complet_line(self, _info, id):
+    #     checkout_complet_line = CheckoutCompletLine.objects.filter(id=id).first()
+    #     return checkout_complet_line
+    #
+    # def resolve_checkouts_complet_line(self):
+    #     checkouts_complet_lines = CheckoutCompletLine.objects.all()
+    #     return checkouts_complet_lines
 
 
-class OrderMutations(graphene.ObjectType):
-    order_create = OrderCreate.Field()
+class CheckoutCompletMutations(graphene.ObjectType):
+    checkout_complet_create = CheckoutCompletCreate.Field()

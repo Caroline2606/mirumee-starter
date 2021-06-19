@@ -1,28 +1,40 @@
 import graphene
 
-from .types import OrderType
-from ...order.models import Order
+from .types import CheckoutCompletType
+from ...order.models import CheckoutComplet
 
 
-class OrderCreateInput(graphene.InputObjectType):
+class CheckoutCompletCreateInput(graphene.InputObjectType):
     checkout_id = graphene.ID(required=True, description="ID of checkout")
-    product_id = graphene.ID(required=True, description="ID of product")
-    price = graphene.Decimal(required=True)
 
-class OrderCreate(graphene.Mutation):
-    order = graphene.Field(OrderType)
+
+class CheckoutCompletCreate(graphene.Mutation):
+    checkout_complet = graphene.Field(CheckoutCompletType)
 
     class Arguments:
-        input = OrderCreateInput(required=True)
+        input = CheckoutCompletCreateInput(required=True)
+        checkout_id = graphene.ID(required=True)
 
     @classmethod
-    def clean_input(cls, input):
-        return input
+    def mutate(cls, root, info, input, checkout_id):
 
-    @classmethod
-    def mutate(cls, root, info, input):
-        cleaned_input = cls.clean_input(input)
+        checkout_complet = CheckoutComplet.objects.create(checkout_id=checkout_id)
 
-        order = Order.objects.create(**cleaned_input)
+        return CheckoutCompletCreate(checkout_complet=checkout_complet)
 
-        return OrderCreate(order=order)
+
+# class CheckoutCompletLineCreateInput(graphene.InputObjectType):
+#     lines = graphene.List(CheckoutCompletCreateInput, required=True)
+#
+#
+# class CheckoutCompletLineCreate(graphene.Mutation):
+#     checkout_complet_line = graphene.Field(CheckoutCompletLineType)
+#
+#     class Arguments:
+#         input = CheckoutCompletLineCreateInput(required=True)
+#
+#     @classmethod
+#     def mutate(cls, root, info, input, checkout_id):
+#         checkout_complet_line = CheckoutCompletLine.objects.create(checkout_id=checkout_id)
+#
+#         return CheckoutCompletLineCreate(checkout_complet_line=checkout_complet_line)

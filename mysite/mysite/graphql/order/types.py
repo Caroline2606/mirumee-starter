@@ -7,5 +7,3 @@ class CheckoutCompletType(DjangoObjectType):
     class Meta:
         model = CheckoutComplet
         fields = '__all__'
-
-

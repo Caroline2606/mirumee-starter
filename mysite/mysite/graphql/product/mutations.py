@@ -31,10 +31,12 @@ class ProductCreate(graphene.Mutation):
 
         return ProductCreate(product=product)
 
+
 class ProductVariantCreateInput(graphene.InputObjectType):
     name = graphene.String(required=True)
     sku = graphene.Int(required=True)
     price = graphene.Decimal(required=True)
+
 
 class ProductVariantCreate(graphene.Mutation):
     product_variant = graphene.Field(ProductVariantType)
@@ -46,8 +48,7 @@ class ProductVariantCreate(graphene.Mutation):
     @classmethod
     def clean_price(cls, price):
         if price <= 0:
-            raise ValidationError
-        return price
+            raise ValidationError()
 
     @classmethod
     def clean_ID(cls, product_id):
@@ -67,21 +68,18 @@ class ProductVariantCreate(graphene.Mutation):
             raise ValidationError
 
     @classmethod
-    def clean_input(cls, data, price, product_id, sku, variant_id):
-        cls.clean_price(price)
-        cls.clean_ID(product_id)
-        cls.clean_SKU(sku, variant_id)
+    def clean_input(cls, data):
+        cls.clean_price(input['price'])
+        cls.clean_ID(input['product_id'])
+        cls.clean_SKU(input['sku']['variant_id'])
 
         return data
-
-
 
     @classmethod
     @staff_member_required
     def mutate(cls, root, _info, input, product_id):
         cleaned_input = cls.clean_input(input)
 
-        product_variant = ProductVariant.objects.create(product_id=product_id, **cleaned_input)
+        product_variant = ProductVariant.objects.create(product_id=product_id)
 
         return ProductVariantCreate(product_variant=product_variant)
-

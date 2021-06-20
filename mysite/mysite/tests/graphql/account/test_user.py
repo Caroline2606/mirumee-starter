@@ -2,14 +2,8 @@ from ....account.models import User
 import json
 
 
-def test_user_by_id(db, client_query):
-    user = User.objects.create_user(
-        email="Test.email@op.pl",
-        password="Test password",
-        first_name="Test first name",
-        last_name="Test last name"
-    )
-
+def test_user_by_id(db, client_query, my_user):
+    user = my_user
     response = client_query(
         """
         query myUser($id: ID!) {
@@ -22,7 +16,7 @@ def test_user_by_id(db, client_query):
             }
         }
         """,
-        variabled={'id': 1}
+        variables={'id': 1}
     )
 
     content = json.loads(response.content)

@@ -19,9 +19,9 @@ class UserCreate(graphene.Mutation):
     @classmethod
     def clean_password(cls, password):
         for password in User:
-            if password == password and len(password) >= 8:
-                return True
-            if password != password and len(password) < 8:
+            if password >= 8:
+                return password
+            if password < 8:
                 raise ValidationError('Your password is too short')
         return password
 
@@ -31,13 +31,16 @@ class UserCreate(graphene.Mutation):
             raise SyntaxError('First letter in first_name and last_name is small')
         return first_name, last_name
 
-    def clean_input(cls, data, password, first_name, last_name):
-        cls.clean_password(password)
-        cls.clean_name(first_name, last_name)
+    def clean_input(cls, data):
+        cls.clean_password(input['password'])
+        cls.clean_name(input['first_name']['last_name'])
+
         return data
 
     @classmethod
     def mutate(cls, root, _info, input):
+        # cleaned_input = cls.clean_input(input)
+
         user = User.objects.create_user(**input)
 
         return UserCreate(user=user)

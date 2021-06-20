@@ -1,15 +1,8 @@
-from ....product.models import Product
 import json
 from decimal import Decimal
 
-def test_product_by_id(db, client_query):
-    product = Product.objects.create(
-        name="Test Product",
-        description="Product description",
-        price=Decimal("10.00"),
-        quantity=10.00
-    )
-
+def test_product_by_id(db, client_query, my_product):
+    product = my_product
     response = client_query(
         """
         query myproduct($id: ID!) {
@@ -22,7 +15,7 @@ def test_product_by_id(db, client_query):
             }
         }
         """,
-        variabled={'id':1}
+        variables={'id':1}
     )
 
     content = json.loads(response.content)
